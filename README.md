@@ -16,6 +16,7 @@ It provides a low-level access to Duckling's `parse()` function.
     d = Duckling()
     d.load() # always load the model first
     print(d.parse('tomorrow'))
+    # [{u'body': u'tomorrow', u'dim': u'time', u'end': 8, u'value': {u'values': [{u'grain': u'day', u'type': u'value', u'value': u'2016-10-10T00:00:00.000-07:00'}], u'grain': u'day', u'type': u'value', u'value': u'2016-10-10T00:00:00.000-07:00'}, u'start': 0}]
 ```
 Other examples can be found in the test directory.
 
