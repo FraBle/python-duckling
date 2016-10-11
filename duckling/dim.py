@@ -14,3 +14,4 @@ class Dim(object):
     EMAIL = u'email'
     URL = u'url'
     PHONENUMBER = u'phone-number'
+    TIMEZONE = u'timezone'
