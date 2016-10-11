@@ -96,8 +96,8 @@ class Duckling(object):
         _functions = {
             u'dim':    self._parse_symbol,
             u'body':   self._parse_string,
-            u'start':  self._parse_number,
-            u'end':    self._parse_number,
+            u'start':  self._parse_int,
+            u'end':    self._parse_int,
             u'latent': self._parse_boolean
         }
 
@@ -117,44 +117,58 @@ class Duckling(object):
     def _parse_dict(self, java_dict, dim=None):
         _functions = {
             u'type':   self._parse_string,
-            u'unit':   self._parse_string,
             u'day':   self._parse_string,
             u'grain':  self._parse_symbol,
+            u'values': self._parse_list,
+            u'second': self._parse_int,
+            u'minute': self._parse_int,
+            u'hour': self._parse_int,
+            u'day': self._parse_int,
+            u'month': self._parse_int,
+            u'year': self._parse_int,
+        }
+        _functions_with_dim = {
+            u'value':   self._parse_value,
+            u'values':   self._parse_list,
             u'normalized':  self._parse_dict,
-            u'values': self._parse_list
+            u'unit': self._parse_keyword
         }
 
         result = {}
         for field in java_dict.iterator():
             key = field.getKey().toString()[1:]
-            if key == u'value':
-                result[key] = self._parse_value(field.getValue(), dim)
+            if key in _functions_with_dim.keys():
+                result[key] = _functions_with_dim[key](field.getValue(), dim)
             else:
                 result[key] = _functions[key](field.getValue())
         return result
 
-    def _parse_list(self, java_list):
+    def _parse_list(self, java_list, dim=None):
         result = []
         for entry in java_list.iterator():
-            result.append(self._parse_dict(entry))
+            result.append(self._parse_dict(entry, dim))
         return result
 
-    def _parse_number(self, java_number):
+    def _parse_float(self, java_number):
+        return float(java_number.toString())
+
+    def _parse_int(self, java_number):
         return int(java_number.toString())
 
     def _parse_value(self, java_value, dim=None):
         _dims = {
             Dim.TIME:           self._parse_time,
-            Dim.TEMPERATURE:    self._parse_number,
-            Dim.NUMBER:         self._parse_number,
-            Dim.ORDINAL:        self._parse_number,
-            Dim.DISTANCE:       self._parse_number,
-            Dim.VOLUME:         self._parse_number,
-            Dim.AMOUNTOFMONEY:  self._parse_number,
-            Dim.DURATION:       self._parse_number,
+            Dim.TEMPERATURE:    self._parse_float,
+            Dim.NUMBER:         self._parse_float,
+            Dim.ORDINAL:        self._parse_int,
+            Dim.DISTANCE:       self._parse_float,
+            Dim.VOLUME:         self._parse_float,
+            Dim.AMOUNTOFMONEY:  self._parse_float,
+            Dim.DURATION:       self._parse_float,
             Dim.EMAIL:          self._parse_string,
             Dim.URL:            self._parse_string,
             Dim.PHONENUMBER:    self._parse_string,
+            Dim.TIMEZONE:       self._parse_string
         }
         if not dim:
             return self._parse_string(java_value)
