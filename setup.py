@@ -32,7 +32,8 @@ setup(
     packages=['duckling'],
     install_requires=[
         'JPype1',
-        'python-dateutil'
+        'python-dateutil',
+        'six'
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'pytest-cov'],

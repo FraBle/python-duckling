@@ -3,6 +3,7 @@ import imp
 import jpype
 import socket
 import threading
+from six import string_types
 from distutils.util import strtobool
 from dateutil import parser
 from .dim import Dim
@@ -176,12 +177,23 @@ class Duckling(object):
 
     def _parse_time(self, time):
         if self.parse_datetime:
-            return parser.parse(time)
+            try:
+                return parser.parse(time)
+            except ValueError:
+                return None
         else:
             return self._parse_string(time)
 
     def _parse_string(self, java_string):
         return java_string
+
+    def _parse_keyword(self, java_keyword, dim=None):
+        if dim == Dim.DURATION:
+            if isinstance(java_keyword, string_types):
+                return self._parse_string(java_keyword)
+            return self._parse_symbol(java_keyword)
+        else:
+            return self._parse_string(java_keyword)
 
     def _parse_symbol(self, java_symbol):
         return java_symbol.toString()[1:]
