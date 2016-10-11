@@ -27,7 +27,7 @@ def two_pm_str(two_pm):
     return two_pm.strftime('%Y-%m-%dT%H:%M:%S%z')
 
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def clojure():
     return jpype.JClass('clojure.java.api.Clojure')
 
@@ -50,6 +50,11 @@ def java_string():
 @pytest.fixture
 def java_long():
     return jpype.JClass('java.lang.Long')
+
+
+@pytest.fixture
+def java_int():
+    return jpype.JClass('java.lang.Integer')
 
 
 @pytest.fixture
@@ -77,7 +82,7 @@ def java_hash_map():
     return jpype.JClass('java.util.HashMap')
 
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def clojure_loaded(clojure):
     duckling_load = clojure.var("duckling.core", "load!")
     duckling_load.invoke()
@@ -89,17 +94,12 @@ def clojure_parse(clojure_loaded):
     return clojure_loaded.var("duckling.core", "parse")
 
 
-@pytest.fixture
-def clojure_with_data(clojure_parse, test_input):
-    return clojure_parse.invoke(Language.ENGLISH, test_input)
-
-
-@pytest.fixture
+@pytest.fixture(scope='module')
 def duckling():
     return Duckling()
 
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def duckling_loaded(duckling):
     duckling.load()
     return duckling
@@ -110,10 +110,11 @@ def test_load(duckling):
     assert duckling._is_loaded is True
 
 
-def test_not_load(duckling):
+def test_not_load():
+    duckling = Duckling()
     assert duckling._is_loaded is False
     with pytest.raises(RuntimeError):
-        duckling.parse("")
+        duckling.parse('')
 
 
 def test_parse(duckling_loaded, test_input):
@@ -193,8 +194,12 @@ def test_parse_value(duckling, two_pm_str, java_long, java_string):
     assert duckling._parse_value(java_string(u'test')) == u'test'
 
 
-def test_parse_number(duckling, java_long):
-    assert duckling._parse_number(java_long('2')) == 2
+def test_parse_float(duckling, java_long):
+    assert duckling._parse_float(java_long('2')) == 2
+
+
+def test_parse_int(duckling, java_int):
+    assert duckling._parse_int(java_int('2')) == 2
 
 
 def test_parse_time(duckling, two_pm, two_pm_str):
@@ -228,7 +233,8 @@ def test_parse_time_input(duckling_loaded):
     result_val = result[0][u'value'][u'values'][0][u'value']
     result_datetime = parser.parse(result_val)
 
-    assert result_datetime == datetime(2020, 9, 06, 0, 0, 0, 0, tzinfo=tzlocal())
+    assert result_datetime == datetime(
+        2020, 9, 6, 0, 0, 0, 0, tzinfo=tzlocal())
 
 
 def test_parse_temperature_input(duckling_loaded,
