@@ -1,6 +1,7 @@
 class Language(object):
 
-    """Helper class containing all supported languages"""
+    """Helper class containing all supported languages
+    """
 
     ARABIC = 'ar$core'
     DANISH = 'da$core'

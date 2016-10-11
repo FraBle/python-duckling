@@ -68,14 +68,14 @@ class Duckling(object):
             input_str: The input as string that has to be parsed.
             language: Optional parameter to specify language,
                 e.g. Duckling.ENGLISH.
-            filter: Optional parameter to specify list of filters for
+            dim_filter: Optional parameter to specify list of filters for
                 dimensions in Duckling.
 
         Returns:
-            A list of dicts with the result from Duckling.parse() call.
+            A list of dicts with the result from the Duckling.parse() call.
 
         Raises:
-            RuntimeError: An error occurred when Duckling model is not loaded
+            RuntimeError: An error occurres when Duckling model is not loaded
                 via load().
         """
         if self._is_loaded is False:
