@@ -11,7 +11,7 @@ setup(
     name='duckling',
     version='1.1.0',
     description='A wrapper for wit.ai\'s Duckling',
-    url='https://github.com/FraBle/duckling',
+    url='https://github.com/FraBle/python-duckling',
     author='Frank Blechschmidt',
     author_email='frank.blechschmidt@sap.com',
     license='Apache License 2.0',
