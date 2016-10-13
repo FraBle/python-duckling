@@ -9,9 +9,18 @@
 
 This library is inspired by [Edward Stone](https://github.com/eadmundo)'s [Python wrapper for natty](https://github.com/eadmundo/python-natty).
 
-It provides a low-level access to Duckling's `parse()` function.
+It provides a low-level access to Duckling's `parse()` function as well as a wrapper for easy access.
 
-#### Example
+#### Examples
+##### High-level (DucklingWrapper)
+```python
+    d = DucklingWrapper()
+    d.parse_time(u'Let\'s meet at 11:45am')
+    # [{u'dim': u'time', u'end': 21, u'start': 11, u'value': {u'value': u'2016-10-14T11:45:00.000-07:00', u'others': [u'2016-10-14T11:45:00.000-07:00', u'2016-10-15T11:45:00.000-07:00', u'2016-10-16T11:45:00.000-07:00']}, u'text': u'at 11:45am'}]
+    d.parse_temperature(u'Let\'s change the temperatur from thirty two celsius to 65 degrees')
+    # [{u'dim': u'temperature', u'end': 65, u'start': 55, u'value': {u'unit': u'degree', u'value': 65.0}, u'text': u'65 degrees'}, {u'dim': u'temperature', u'end': 51, u'start': 33, u'value': {u'unit': u'celsius', u'value': 32.0}, u'text': u'thirty two celsius'}]
+```
+##### Low-level (Duckling)
 ```python
     d = Duckling()
     d.load() # always load the model first
@@ -21,7 +30,6 @@ It provides a low-level access to Duckling's `parse()` function.
 Other examples can be found in the test directory.
 
 #### Future Work
-- provide simplified second interface to directly prodiving entities from input instead if Duckling's result dict.
 - fixing all upcoming bug reports and issues.
 
 #### Credit
