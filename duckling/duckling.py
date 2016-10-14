@@ -20,9 +20,6 @@ if jpype.isJVMStarted() is not 1:
     )
 
 socket.setdefaulttimeout(15)
-lock = threading.Lock()
-
-Clojure = jpype.JClass('clojure.java.api.Clojure')
 
 
 class Duckling(object):
@@ -30,32 +27,57 @@ class Duckling(object):
     """Python wrapper for Duckling by wit.ai.
 
     Attributes:
+        jvm_started: Optional attribute to specify if the JVM has already been
+            started (with all Java dependencies loaded).
         parse_datetime: Optional attribute to specify if datetime string should 
             be parsed with datetime.strptime(). Default is False.
     """
 
-    def __init__(self, parse_datetime=False):
+    def __init__(self, jvm_started=False, parse_datetime=False):
         """Initializes Duckling.
         """
 
         self.parse_datetime = parse_datetime
         self._is_loaded = False
+        self._lock = threading.Lock()
+
+        if not jvm_started:
+            self._classpath = self._create_classpath()
+            self._start_jvm()
 
         try:
             # make it thread-safe
             if threading.activeCount() > 1:
                 if jpype.isThreadAttachedToJVM() is not 1:
                     jpype.attachThreadToJVM()
-            lock.acquire()
+            self._lock.acquire()
+
+            self.clojure = jpype.JClass('clojure.java.api.Clojure')
             # require the duckling Clojure lib
-            require = Clojure.var("clojure.core", "require")
-            require.invoke(Clojure.read("duckling.core"))
+            require = self.clojure.var("clojure.core", "require")
+            require.invoke(self.clojure.read("duckling.core"))
         finally:
-            lock.release()
+            self._lock.release()
+
+    def _start_jvm(self):
+        if jpype.isJVMStarted() is not 1:
+            jpype.startJVM(
+                jpype.getDefaultJVMPath(),
+                '-Djava.class.path={classpath}'.format(
+                    classpath=self._classpath)
+            )
+
+    def _create_classpath(self):
+        jars = []
+        for top, dirs, files in os.walk(os.path.join(imp.find_module('duckling')[1], 'jars')):
+            for file_name in files:
+                if file_name.endswith('.jar'):
+                    jars.append(os.path.join(top, file_name))
+        return os.pathsep.join(jars)
 
     def load(self):
         """Loads the Duckling corpus"""
-        duckling_load = Clojure.var("duckling.core", "load!")
+        duckling_load = self.clojure.var("duckling.core", "load!")
         duckling_load.invoke()
         self._is_loaded = True
 
@@ -82,14 +104,14 @@ class Duckling(object):
         if self._is_loaded is False:
             raise RuntimeError(
                 'Please load the model first by calling load()')
-        duckling_parse = Clojure.var("duckling.core", "parse")
+        duckling_parse = self.clojure.var("duckling.core", "parse")
 
         filter_str = '[]'
         if dim_filter:
             filter_str = '[:{filter}]'.format(filter=dim_filter)
 
         duckling_result = duckling_parse.invoke(
-            language, input_str, Clojure.read(filter_str))
+            language, input_str, self.clojure.read(filter_str))
 
         return self._parse_result(duckling_result)
 

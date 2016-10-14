@@ -14,10 +14,11 @@ class DucklingWrapper(object):
             Duckling. Default is Language.ENGLISH.
     """
 
-    def __init__(self, parse_datetime=False, language=Language.ENGLISH):
+    def __init__(self, jvm_started=False, parse_datetime=False, language=Language.ENGLISH):
         super(DucklingWrapper, self).__init__()
         self.language = language
-        self.duckling = Duckling(parse_datetime)
+        self.duckling = Duckling(
+            jvm_started=jvm_started, parse_datetime=parse_datetime)
         self.duckling.load()
         self._dims = {
             Dim.TIME:           self._parse_time,
