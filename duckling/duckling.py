@@ -9,16 +9,6 @@ from dateutil import parser
 from .dim import Dim
 from .language import Language
 
-if jpype.isJVMStarted() is not 1:
-    jars = []
-    for top, dirs, files in os.walk(imp.find_module('duckling')[1] + '/jars'):
-        for nm in files:
-            jars.append(os.path.join(top, nm))
-    jpype.startJVM(
-        jpype.getDefaultJVMPath(),
-        "-Djava.class.path=%s" % os.pathsep.join(jars)
-    )
-
 socket.setdefaulttimeout(15)
 
 
