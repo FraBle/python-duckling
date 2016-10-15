@@ -1,3 +1,6 @@
 test:
-    override:
-        - py.test
+  override:
+    - py.test
+dependencies: 
+  pre:
+    - pip install pytest pytest-cov JPype1 python-dateutil
