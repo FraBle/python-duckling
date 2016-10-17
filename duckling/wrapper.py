@@ -8,6 +8,8 @@ class DucklingWrapper(object):
     """Simplified Python wrapper for Duckling by wit.ai.
 
     Attributes:
+        jvm_started: Optional attribute to specify if the JVM has already been
+            started (with all Java dependencies loaded).
         parse_datetime: Optional attribute to specify if datetime string should
             be parsed with datetime.strptime(). Default is False.
         language: Optional attribute to specify language to be used with
