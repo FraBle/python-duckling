@@ -1,6 +1,7 @@
 import pytest
-from datetime import time, date, timedelta
+from datetime import time, date, timedelta, datetime
 from dateutil import parser
+from dateutil.tz import tzlocal
 from duckling import DucklingWrapper, Dim
 
 
@@ -12,6 +13,19 @@ def duckling_wrapper():
 @pytest.fixture(scope='module')
 def duckling_wrapper_with_datetime():
     return DucklingWrapper(parse_datetime=True)
+
+
+@pytest.fixture
+def today_evening():
+    return datetime.today().replace(
+        hour=18, minute=0, second=0, microsecond=0, tzinfo=tzlocal())
+
+
+@pytest.fixture
+def tomorrow():
+    return datetime.today().replace(
+        hour=0, minute=0, second=0, microsecond=0, tzinfo=tzlocal()) \
+        + timedelta(days=1)
 
 
 def test_parse_time(duckling_wrapper):
@@ -269,3 +283,20 @@ def test_parse(duckling_wrapper):
         if entry[u'dim'] == Dim.TIME and entry[u'text'] == u'today':
             assert date.today() == parser.parse(
                 entry[u'value'][u'value']).date()
+
+
+def test_interval(duckling_wrapper, today_evening, tomorrow):
+    result = duckling_wrapper.parse_time(
+        u'a night away')
+    assert len(result) == 1
+    assert tomorrow == parser.parse(result[0][u'value'][u'value'][u'to'])
+    assert today_evening == parser.parse(
+        result[0][u'value'][u'value'][u'from'])
+
+
+def test_interval_with_datetime(duckling_wrapper_with_datetime, today_evening, tomorrow):
+    result = duckling_wrapper_with_datetime.parse_time(
+        u'a night away')
+    assert len(result) == 1
+    assert tomorrow == result[0][u'value'][u'value'][u'to']
+    assert today_evening == result[0][u'value'][u'value'][u'from']

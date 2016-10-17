@@ -51,7 +51,7 @@ class DucklingWrapper(object):
             u'start': duckling_result_entry[u'start'],
             u'end': duckling_result_entry[u'end'],
             u'value': {
-                u'value': duckling_result_entry[u'value'][u'value']
+                u'value': duckling_result_entry[u'value'].get(u'value', None)
             }
         }
         return result_entry
@@ -63,8 +63,29 @@ class DucklingWrapper(object):
         })
         return result_entry
 
+    def _is_interval(self, duckling_result_entry):
+        return u'from' in duckling_result_entry[u'value'] and \
+            u'from' in duckling_result_entry[u'value']
+
+    def _parse_interval(self, result_entry, duckling_result_entry):
+        result_entry[u'value'].update({
+            u'value': {
+                u'to': duckling_result_entry[u'value'][u'to'][u'value'],
+                u'from': duckling_result_entry[u'value'][u'from'][u'value']
+            },
+            u'others': []
+        })
+        for value in duckling_result_entry[u'value'][u'values']:
+            result_entry[u'value'][u'others'].append({
+                u'to': value[u'to'][u'value'],
+                u'from': value[u'from'][u'value']
+            })
+        return result_entry
+
     def _parse_time(self, duckling_result_entry):
         result_entry = self._parse_basic_info(duckling_result_entry)
+        if self._is_interval(duckling_result_entry):
+            return self._parse_interval(result_entry, duckling_result_entry)
         result_entry[u'value'].update({
             u'others': []
         })

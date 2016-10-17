@@ -144,7 +144,9 @@ class Duckling(object):
             u'value':   self._parse_value,
             u'values':   self._parse_list,
             u'normalized':  self._parse_dict,
-            u'unit': self._parse_keyword
+            u'unit': self._parse_keyword,
+            u'from':  self._parse_dict,
+            u'to':  self._parse_dict
         }
 
         result = {}
