@@ -300,3 +300,18 @@ def test_interval_with_datetime(duckling_wrapper_with_datetime, today_evening, t
     assert len(result) == 1
     assert tomorrow == result[0][u'value'][u'value'][u'to']
     assert today_evening == result[0][u'value'][u'value'][u'from']
+
+
+def test_interval_only_from(duckling_wrapper, today_evening):
+    result = duckling_wrapper.parse_time(
+        u'after tonight')
+    assert len(result) == 1
+    assert today_evening == parser.parse(
+        result[0][u'value'][u'value'][u'from'])
+
+
+def test_interval_only_from_with_datetime(duckling_wrapper_with_datetime, today_evening):
+    result = duckling_wrapper_with_datetime.parse_time(
+        u'after tonight')
+    assert len(result) == 1
+    assert today_evening == result[0][u'value'][u'value'][u'from']
