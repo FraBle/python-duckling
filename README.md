@@ -36,5 +36,5 @@ Other examples can be found in the test directory.
 - [wit.ai](https://wit.ai/) for their awesome work and tools for the NLP community
 - [Edward Stone](https://github.com/eadmundo) for the inspiration to write a python wrapper for library from a different programming language
 
-#### Credit
+#### License
 - Apache License 2.0 (check the LICENSE file)
