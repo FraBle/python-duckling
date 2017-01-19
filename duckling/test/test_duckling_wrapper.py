@@ -42,6 +42,40 @@ def test_parse_time_with_datetime(duckling_wrapper_with_datetime):
     assert time(11, 45) == result[0][u'value'][u'value'].time()
 
 
+def test_parse_time_with_reference_time(duckling_wrapper):
+    result = duckling_wrapper.parse_time(
+        u'Let\'s meet tomorrow', reference_time=u'1990-12-30')
+    assert len(result) == 1
+    assert parser.parse(u'1990-12-30').date() + \
+        timedelta(days=1) == parser.parse(result[0][u'value'][u'value']).date()
+
+
+def test_parse_time_with_reference_time_and_datetime(duckling_wrapper_with_datetime):
+    result = duckling_wrapper_with_datetime.parse_time(
+        u'Let\'s meet tomorrow', reference_time=u'1990-12-30')
+    assert len(result) == 1
+    assert parser.parse(u'1990-12-30').date() + \
+        timedelta(days=1) == result[0][u'value'][u'value'].date()
+
+
+def test_parse_time_with_reference_time_and_timezone(duckling_wrapper):
+    result = duckling_wrapper.parse_time(
+        u'Let\'s meet tomorrow at 12pm', reference_time=u'1990-12-30 15:30:00-8:00')
+    assert len(result) == 1
+    assert parser.parse(u'1990-12-30').date() + \
+        timedelta(days=1) == parser.parse(result[0][u'value'][u'value']).date()
+    assert time(12, 00) == parser.parse(result[0][u'value'][u'value']).time()
+
+
+def test_parse_time_with_reference_time_and_datetime_and_timezone(duckling_wrapper_with_datetime):
+    result = duckling_wrapper_with_datetime.parse_time(
+        u'Let\'s meet tomorrow at 12pm', reference_time=u'1990-12-30 15:30:00-8:00')
+    assert len(result) == 1
+    assert parser.parse(u'1990-12-30').date() + \
+        timedelta(days=1) == result[0][u'value'][u'value'].date()
+    assert time(12, 00) == result[0][u'value'][u'value'].time()
+
+
 def test_parse_times(duckling_wrapper):
     result = duckling_wrapper.parse_time(
         u'Let\'s meet at 11:45am or tomorrow')
@@ -283,6 +317,40 @@ def test_parse(duckling_wrapper):
         if entry[u'dim'] == Dim.TIME and entry[u'text'] == u'today':
             assert date.today() == parser.parse(
                 entry[u'value'][u'value']).date()
+
+
+def test_parse_with_reference_time(duckling_wrapper):
+    result = duckling_wrapper.parse(
+        u'Let\'s meet tomorrow', reference_time=u'1990-12-30')
+    assert len(result) == 1
+    assert parser.parse(u'1990-12-30').date() + \
+        timedelta(days=1) == parser.parse(result[0][u'value'][u'value']).date()
+
+
+def test_parse_with_reference_time_and_datetime(duckling_wrapper_with_datetime):
+    result = duckling_wrapper_with_datetime.parse(
+        u'Let\'s meet tomorrow', reference_time=u'1990-12-30')
+    assert len(result) == 1
+    assert parser.parse(u'1990-12-30').date() + \
+        timedelta(days=1) == result[0][u'value'][u'value'].date()
+
+
+def test_parse_with_reference_time_and_timezone(duckling_wrapper):
+    result = duckling_wrapper.parse(
+        u'Let\'s meet tomorrow at 12pm', reference_time=u'1990-12-30 15:30:00-8:00')
+    assert len(result) == 5
+    assert parser.parse(u'1990-12-30').date() + \
+        timedelta(days=1) == parser.parse(result[4][u'value'][u'value']).date()
+    assert time(12, 00) == parser.parse(result[4][u'value'][u'value']).time()
+
+
+def test_parse_with_reference_time_and_datetime_and_timezone(duckling_wrapper_with_datetime):
+    result = duckling_wrapper_with_datetime.parse(
+        u'Let\'s meet tomorrow at 12pm', reference_time=u'1990-12-30 15:30:00-8:00')
+    assert len(result) == 5
+    assert parser.parse(u'1990-12-30').date() + \
+        timedelta(days=1) == result[4][u'value'][u'value'].date()
+    assert time(12, 00) == result[4][u'value'][u'value'].time()
 
 
 def test_interval(duckling_wrapper, today_evening, tomorrow):

@@ -71,7 +71,7 @@ class Duckling(object):
         duckling_load.invoke()
         self._is_loaded = True
 
-    def parse(self, input_str, language=Language.ENGLISH, dim_filter=None):
+    def parse(self, input_str, language=Language.ENGLISH, dim_filter=None, reference_time=''):
         """Parses datetime information out of string input.
 
         It invokes the Duckling.parse() function in Clojure.
@@ -83,6 +83,7 @@ class Duckling(object):
                 e.g. Duckling.ENGLISH.
             dim_filter: Optional parameter to specify list of filters for
                 dimensions in Duckling.
+            reference_time: Optional reference time for Duckling.
 
         Returns:
             A list of dicts with the result from the Duckling.parse() call.
@@ -95,15 +96,42 @@ class Duckling(object):
             raise RuntimeError(
                 'Please load the model first by calling load()')
         duckling_parse = self.clojure.var("duckling.core", "parse")
+        duckling_time = self.clojure.var("duckling.time.obj", "t")
+        clojure_hashmap = self.clojure.var("clojure.core", "hash-map")
 
         filter_str = '[]'
         if dim_filter:
             filter_str = '[:{filter}]'.format(filter=dim_filter)
 
-        duckling_result = duckling_parse.invoke(
-            language, input_str, self.clojure.read(filter_str))
+        if reference_time:
+            duckling_result = duckling_parse.invoke(
+                language,
+                input_str,
+                self.clojure.read(filter_str),
+                clojure_hashmap.invoke(
+                    self.clojure.read(':reference-time'),
+                    duckling_time.invoke(
+                        *self._parse_reference_time(reference_time))
+                )
+            )
+        else:
+            duckling_result = duckling_parse.invoke(
+                language, input_str, self.clojure.read(filter_str))
 
         return self._parse_result(duckling_result)
+
+    def _parse_reference_time(self, reference_time):
+        date_info = parser.parse(reference_time)
+        utc_offset = 0
+        if date_info.utcoffset():
+            if date_info.utcoffset().days:
+                utc_offset = 24 - date_info.utcoffset().seconds / 3600
+            else:
+                utc_offset = date_info.utcoffset().seconds / 3600
+        return (utc_offset, date_info.year,
+                date_info.month, date_info.day,
+                date_info.hour, date_info.minute,
+                date_info.second)
 
     def _parse_result(self, duckling_result):
         _functions = {

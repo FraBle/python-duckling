@@ -37,10 +37,11 @@ class DucklingWrapper(object):
             Dim.TIMEZONE:       self._parse_basic_info
         }
 
-    def _parse(self, input_str, dim=None):
+    def _parse(self, input_str, dim=None, reference_time=''):
         result = []
         duckling_result = self.duckling.parse(
-            input_str, self.language, dim_filter=dim)
+            input_str, self.language, dim_filter=dim,
+            reference_time=reference_time)
         for entry in duckling_result:
             result_entry = self._dims[entry[u'dim']](entry)
             result.append(result_entry)
@@ -127,12 +128,13 @@ class DucklingWrapper(object):
 
     # Public API
 
-    def parse(self, input_str):
+    def parse(self, input_str, reference_time=''):
         """Parses input with Duckling for all dims.
 
         Args:
             input_str: An input string, e.g. 'You owe me twenty bucks, please
                 call me today'.
+            reference_time: Optional reference time for Duckling.
 
         Returns:
             A preprocessed list of results (dicts) from Duckling output. For
@@ -215,13 +217,14 @@ class DucklingWrapper(object):
                }
             ]
         """
-        return self._parse(input_str)
+        return self._parse(input_str, reference_time=reference_time)
 
-    def parse_time(self, input_str):
+    def parse_time(self, input_str, reference_time=''):
         """Parses input with Duckling for occurences of times.
 
         Args:
             input_str: An input string, e.g. 'Let's meet at 11:45am'.
+            reference_time: Optional reference time for Duckling.
 
         Returns:
             A preprocessed list of results (dicts) from Duckling output. For
@@ -244,7 +247,8 @@ class DucklingWrapper(object):
                }
             ]
         """
-        return self._parse(input_str, dim=Dim.TIME)
+        return self._parse(input_str, dim=Dim.TIME,
+                           reference_time=reference_time)
 
     def parse_timezone(self, input_str):
         """Parses input with Duckling for occurences of timezones.

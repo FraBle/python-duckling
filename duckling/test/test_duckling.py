@@ -1,6 +1,6 @@
 import pytest
 import jpype
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import parser
 from dateutil.tz import tzlocal
 from duckling import Duckling, Dim, Language
@@ -9,6 +9,16 @@ from duckling import Duckling, Dim, Language
 @pytest.fixture
 def test_input():
     return '2pm'
+
+
+@pytest.fixture
+def test_time_input():
+    return 'Let\'s meet tomorrow'
+
+
+@pytest.fixture
+def dec_30():
+    return '1990-12-30'
 
 
 @pytest.fixture
@@ -120,6 +130,12 @@ def test_not_load():
 def test_parse(duckling_loaded, test_input):
     result = duckling_loaded.parse(test_input)
     assert len(result) == 5
+
+
+def test_parse_with_reference_time(duckling_loaded, test_time_input, dec_30):
+    result = duckling_loaded.parse(test_time_input, reference_time=dec_30)
+    assert parser.parse(u'1990-12-30').date() + timedelta(days=1) == parser.parse(
+        result[0][u'value'][u'values'][0][u'value']).date()
 
 
 def test_parse_with_filter(duckling_loaded, test_input, two_pm):
