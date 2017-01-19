@@ -9,14 +9,14 @@ from setuptools import setup
 
 setup(
     name='duckling',
-    version='1.2.0',
+    version='1.2.1',
     description='A wrapper for wit.ai\'s Duckling',
     url='https://github.com/FraBle/python-duckling',
     author='Frank Blechschmidt',
     author_email='frank.blechschmidt@sap.com',
     license='Apache License 2.0',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries',
         'License :: OSI Approved :: Apache Software License',
@@ -27,6 +27,7 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     keywords='duckling witai datetime parser parsing nlp',
     packages=['duckling'],
