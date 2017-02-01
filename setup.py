@@ -9,7 +9,7 @@ from setuptools import setup
 
 setup(
     name='duckling',
-    version='1.2.1',
+    version='1.3.0',
     description='A wrapper for wit.ai\'s Duckling',
     url='https://github.com/FraBle/python-duckling',
     author='Frank Blechschmidt',

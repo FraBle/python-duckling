@@ -14,13 +14,25 @@ class DucklingWrapper(object):
             be parsed with datetime.strptime(). Default is False.
         language: Optional attribute to specify language to be used with
             Duckling. Default is Language.ENGLISH.
+        minimum_heap_size: Optional attribute to set initial and minimum heap
+            size. Default is 128m.
+        maximum_heap_size: Optional attribute to set maximum heap size. Default
+            is 2048m.
     """
 
-    def __init__(self, jvm_started=False, parse_datetime=False, language=Language.ENGLISH):
+    def __init__(self,
+                 jvm_started=False,
+                 parse_datetime=False,
+                 language=Language.ENGLISH,
+                 minimum_heap_size='128m',
+                 maximum_heap_size='2048m'):
         super(DucklingWrapper, self).__init__()
         self.language = language
         self.duckling = Duckling(
-            jvm_started=jvm_started, parse_datetime=parse_datetime)
+            jvm_started=jvm_started,
+            parse_datetime=parse_datetime,
+            minimum_heap_size=minimum_heap_size,
+            maximum_heap_size=maximum_heap_size)
         self.duckling.load()
         self._dims = {
             Dim.TIME:           self._parse_time,

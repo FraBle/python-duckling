@@ -21,9 +21,17 @@ class Duckling(object):
             started (with all Java dependencies loaded).
         parse_datetime: Optional attribute to specify if datetime string should 
             be parsed with datetime.strptime(). Default is False.
+        minimum_heap_size: Optional attribute to set initial and minimum heap
+            size. Default is 128m.
+        maximum_heap_size: Optional attribute to set maximum heap size. Default
+            is 2048m.
     """
 
-    def __init__(self, jvm_started=False, parse_datetime=False):
+    def __init__(self,
+                 jvm_started=False,
+                 parse_datetime=False,
+                 minimum_heap_size='128m',
+                 maximum_heap_size='2048m'):
         """Initializes Duckling.
         """
 
@@ -33,7 +41,7 @@ class Duckling(object):
 
         if not jvm_started:
             self._classpath = self._create_classpath()
-            self._start_jvm()
+            self._start_jvm(minimum_heap_size, maximum_heap_size)
 
         try:
             # make it thread-safe
@@ -49,12 +57,17 @@ class Duckling(object):
         finally:
             self._lock.release()
 
-    def _start_jvm(self):
+    def _start_jvm(self, minimum_heap_size, maximum_heap_size):
+        jvm_options = [
+            '-Xms{minimum_heap_size}'.format(minimum_heap_size=minimum_heap_size),
+            '-Xmx{maximum_heap_size}'.format(maximum_heap_size=maximum_heap_size),
+            '-Djava.class.path={classpath}'.format(
+                classpath=self._classpath)
+        ]
         if jpype.isJVMStarted() is not 1:
             jpype.startJVM(
                 jpype.getDefaultJVMPath(),
-                '-Djava.class.path={classpath}'.format(
-                    classpath=self._classpath)
+                *jvm_options
             )
 
     def _create_classpath(self):
