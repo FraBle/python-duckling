@@ -5,6 +5,10 @@
 
 ![CircleCi Build Status](https://circleci.com/gh/FraBle/python-duckling.svg?style=shield&circle-token=ce50d3fb4d377c59a8eb1a25f3467dd0ebe9457a)
 
+#### Pypi Version
+
+[![PyPI version](https://badge.fury.io/py/duckling.svg)](https://badge.fury.io/py/duckling)
+
 #### Introduction
 
 This library is inspired by [Edward Stone](https://github.com/eadmundo)'s [Python wrapper for natty](https://github.com/eadmundo/python-natty).
