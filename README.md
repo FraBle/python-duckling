@@ -29,6 +29,208 @@ It provides a low-level access to Duckling's `parse()` function as well as a wra
 ```
 Other examples can be found in the [test](https://github.com/FraBle/python-duckling/tree/master/duckling/test) directory.
 
+#### Functions
+##### High-level (DucklingWrapper)
+```python
+DucklingWrapper(jvm_started=False, parse_datetime=False, language=Language.ENGLISH, minimum_heap_size='128m', maximum_heap_size='2048m'):
+
+    """Simplified Python wrapper for Duckling by wit.ai.
+
+    Attributes:
+        jvm_started: Optional attribute to specify if the JVM has already been
+            started (with all Java dependencies loaded).
+        parse_datetime: Optional attribute to specify if datetime string should
+            be parsed with datetime.strptime(). Default is False.
+        language: Optional attribute to specify language to be used with
+            Duckling. Default is Language.ENGLISH.
+        minimum_heap_size: Optional attribute to set initial and minimum heap
+            size. Default is 128m.
+        maximum_heap_size: Optional attribute to set maximum heap size. Default
+            is 2048m.
+    """
+
+duckling_wrapper.parse(self, input_str, reference_time=''):
+        """Parses input with Duckling for all dims.
+
+        Args:
+            input_str: An input string, e.g. 'You owe me twenty bucks, please
+                call me today'.
+            reference_time: Optional reference time for Duckling.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_time(self, input_str, reference_time=''):
+        """Parses input with Duckling for occurences of times.
+
+        Args:
+            input_str: An input string, e.g. 'Let's meet at 11:45am'.
+            reference_time: Optional reference time for Duckling.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_timezone(self, input_str):
+        """Parses input with Duckling for occurences of timezones.
+
+        Args:
+            input_str: An input string, e.g. 'My timezone is pdt'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_temperature(self, input_str):
+        """Parses input with Duckling for occurences of temperatures.
+
+        Args:
+            input_str: An input string, e.g. 'Let's change the temperature from
+                thirty two celsius to 65 degrees'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_number(self, input_str):
+        """Parses input with Duckling for occurences of numbers.
+
+        Args:
+            input_str: An input string, e.g. 'I'm 25 years old'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_ordinal(self, input_str):
+        """Parses input with Duckling for occurences of ordinals.
+
+        Args:
+            input_str: An input string, e.g. 'I'm first, you're 2nd'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_distance(self, input_str):
+        """Parses input with Duckling for occurences of distances.
+
+        Args:
+            input_str: An input string, e.g. 'I commute 5 miles everyday'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_volume(self, input_str):
+        """Parses input with Duckling for occurences of volumes.
+
+        Args:
+            input_str: An input string, e.g. '1 gallon is 3785ml'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_money(self, input_str):
+        """Parses input with Duckling for occurences of moneys.
+
+        Args:
+            input_str: An input string, e.g. 'You owe me 10 dollars'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_duration(self, input_str):
+        """Parses input with Duckling for occurences of durations.
+
+        Args:
+            input_str: An input string, e.g. 'I ran for 2 hours today'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_email(self, input_str):
+        """Parses input with Duckling for occurences of emails.
+
+        Args:
+            input_str: An input string, e.g. 'Shoot me an email at
+                contact@frank-blechschmidt.com'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_url(self, input_str):
+        """Parses input with Duckling for occurences of urls.
+
+        Args:
+            input_str: An input string, e.g. 'http://frank-blechschmidt.com is
+                under construction, but you can check my github
+                github.com/FraBle'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+
+duckling_wrapper.parse_phone_number(self, input_str):
+        """Parses input with Duckling for occurences of phone numbers.
+
+        Args:
+            input_str: An input string, e.g. '424-242-4242 is obviously a fake
+                number'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+```
+
+##### Low-level (Duckling)
+```python
+Duckling(jvm_started=False, parse_datetime=False, minimum_heap_size='128m', maximum_heap_size='2048m'):
+
+    """Python wrapper for Duckling by wit.ai.
+
+    Attributes:
+        jvm_started: Optional attribute to specify if the JVM has already been
+            started (with all Java dependencies loaded).
+        parse_datetime: Optional attribute to specify if datetime string 
+            should be parsed with datetime.strptime(). Default is False.
+        minimum_heap_size: Optional attribute to set initial and minimum heap
+            size. Default is 128m.
+        maximum_heap_size: Optional attribute to set maximum heap size. Default
+            is 2048m.
+    """
+
+duckling.load():
+        """Loads the Duckling corpus"""
+
+duckling.parse(self, input_str, language=Language.ENGLISH, dim_filter=None, reference_time=''):
+        """Parses datetime information out of string input.
+
+        It invokes the Duckling.parse() function in Clojure.
+        A language can be specified, default is English.
+
+        Args:
+            input_str: The input as string that has to be parsed.
+            language: Optional parameter to specify language,
+                e.g. Duckling.ENGLISH.
+            dim_filter: Optional parameter to specify list of filters for
+                dimensions in Duckling.
+            reference_time: Optional reference time for Duckling.
+
+        Returns:
+            A list of dicts with the result from the Duckling.parse() call.
+
+        Raises:
+            RuntimeError: An error occurres when Duckling model is not loaded
+                via load().
+        """
+```
+
 #### Future Work
 - fixing all upcoming bug reports and issues.
 
