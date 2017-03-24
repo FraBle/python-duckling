@@ -21,7 +21,7 @@ class Language(object):
     VIETNAMESE = 'vi$core'
     CHINESE = 'zh$core'
 
-    SUPPORTED_LANGUAGES = [
+    SUPPORTED_LANGUAGES = {
         ARABIC,
         DANISH,
         GERMAN,
@@ -39,7 +39,7 @@ class Language(object):
         UKRAINIAN,
         VIETNAMESE,
         CHINESE,
-    ]
+    }
 
     @classmethod
     def is_supported(cls, lang):
