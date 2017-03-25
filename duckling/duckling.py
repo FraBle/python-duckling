@@ -139,9 +139,9 @@ class Duckling(object):
         utc_offset = 0
         if date_info.utcoffset():
             if date_info.utcoffset().days:
-                utc_offset = 24 - date_info.utcoffset().seconds / 3600
+                utc_offset = 24 - date_info.utcoffset().seconds // 3600
             else:
-                utc_offset = date_info.utcoffset().seconds / 3600
+                utc_offset = date_info.utcoffset().seconds // 3600
         return (utc_offset, date_info.year,
                 date_info.month, date_info.day,
                 date_info.hour, date_info.minute,
