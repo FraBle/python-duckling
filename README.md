@@ -242,5 +242,8 @@ duckling.parse(self, input_str, language=Language.ENGLISH, dim_filter=None, refe
 - [wit.ai](https://wit.ai/) for their awesome work and tools for the NLP community
 - [Edward Stone](https://github.com/eadmundo) for the inspiration to write a python wrapper for library from a different programming language
 
+#### Contributors
+- [Tom Bocklisch (tmbo)](https://github.com/tmbo)
+
 #### License
 - Apache License 2.0 (check the LICENSE file)
