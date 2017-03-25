@@ -93,7 +93,7 @@ class Duckling(object):
         Args:
             input_str: The input as string that has to be parsed.
             language: Optional parameter to specify language,
-                e.g. Duckling.ENGLISH.
+                e.g. Duckling.ENGLISH or supported ISO 639-1 Code (e.g. "en")
             dim_filter: Optional parameter to specify list of filters for
                 dimensions in Duckling.
             reference_time: Optional reference time for Duckling.
@@ -108,6 +108,7 @@ class Duckling(object):
         if self._is_loaded is False:
             raise RuntimeError(
                 'Please load the model first by calling load()')
+        language = Language.convert_to_duckling_language_id(language)
         duckling_parse = self.clojure.var("duckling.core", "parse")
         duckling_time = self.clojure.var("duckling.time.obj", "t")
         clojure_hashmap = self.clojure.var("clojure.core", "hash-map")
