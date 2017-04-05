@@ -85,7 +85,7 @@ class Duckling(object):
 
         Args:
             languages: Optional parameter to specify languages,
-                e.g. [Duckling.ENGLISH, Duckling.FRENCH] or supported ISO 639-1 Codes (e.g. ["en", "fr])
+                e.g. [Duckling.ENGLISH, Duckling.FRENCH] or supported ISO 639-1 Codes (e.g. ["en", "fr"])
         """
         duckling_load = self.clojure.var("duckling.core", "load!")
 
