@@ -85,14 +85,23 @@ class Duckling(object):
 
         Args:
             languages: Optional parameter to specify languages,
-                e.g. a list of supported ISO 639-1 Codes (e.g. ["en"])
+                e.g. [Duckling.ENGLISH, Duckling.FRENCH] or supported ISO 639-1 Codes (e.g. ["en", "fr])
         """
         duckling_load = self.clojure.var("duckling.core", "load!")
 
-        # Duckling's load function expects ISO 639-1 Language Codes (e.g. "en")
-        if languages is not None and all(Language.is_supported(lang + "$core") for lang in languages):
-            languages = '{{:languages ("{}")}}'.format('" "'.join(languages))
-            duckling_load.invoke(self.clojure.read(languages))
+        if languages is not None:
+            # Duckling's load function expects ISO 639-1 Language Codes (e.g. "en")
+            languages = [Language.convert_to_iso(lang) for lang in languages]
+
+            clojure_hashmap = self.clojure.var("clojure.core", "hash-map")
+            clojure_list = self.clojure.var("clojure.core", "list")
+
+            duckling_load.invoke(
+                clojure_hashmap.invoke(
+                    self.clojure.read(':languages'),
+                    clojure_list.invoke(*languages)
+                )
+            )
         else:
             duckling_load.invoke()
 
