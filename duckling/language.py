@@ -61,10 +61,4 @@ class Language(object):
 
     @classmethod
     def convert_to_iso(cls, lang):
-        if lang is not None and cls.is_supported(lang):
-            return lang[:2]
-        elif lang is not None and cls.is_supported(lang + "$core"):   # Support ISO 639-1 Language Codes (e.g. "en")
-            return lang
-        else:
-            raise ValueError("Unsupported language '{}'. Supported languages: {}".format(
-                lang, ", ".join(cls.SUPPORTED_LANGUAGES)))
+        return cls.convert_to_duckling_language_id(lang)[:2]

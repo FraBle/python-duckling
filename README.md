@@ -209,7 +209,7 @@ Duckling(jvm_started=False, parse_datetime=False, minimum_heap_size='128m', maxi
             is 2048m.
     """
 
-duckling.load(self, languages=None):
+duckling.load(self, languages=[]):
         """Loads the Duckling corpus.
 
         Languages can be specified, defaults to all.
