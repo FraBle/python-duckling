@@ -243,7 +243,9 @@ duckling.parse(self, input_str, language=Language.ENGLISH, dim_filter=None, refe
 ```
 
 #### Future Work
-- fixing all upcoming bug reports and issues.
+- Support new Haskell version of Duckling (probably in new repo)
+    + [Blog post](https://wit.ai/blog/2017/05/01/new-duckling)
+    + [Github](https://github.com/facebookincubator/duckling)
 
 #### Credit
 - [wit.ai](https://wit.ai/) for their awesome work and tools for the NLP community
