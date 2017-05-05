@@ -78,10 +78,32 @@ class Duckling(object):
                     jars.append(os.path.join(top, file_name))
         return os.pathsep.join(jars)
 
-    def load(self):
-        """Loads the Duckling corpus"""
+    def load(self, languages=[]):
+        """Loads the Duckling corpus.
+
+        Languages can be specified, defaults to all.
+
+        Args:
+            languages: Optional parameter to specify languages,
+                e.g. [Duckling.ENGLISH, Duckling.FRENCH] or supported ISO 639-1 Codes (e.g. ["en", "fr"])
+        """
         duckling_load = self.clojure.var("duckling.core", "load!")
-        duckling_load.invoke()
+        clojure_hashmap = self.clojure.var("clojure.core", "hash-map")
+        clojure_list = self.clojure.var("clojure.core", "list")
+
+        if languages:
+            # Duckling's load function expects ISO 639-1 Language Codes (e.g. "en")
+            iso_languages = [Language.convert_to_iso(lang) for lang in languages]
+
+            duckling_load.invoke(
+                clojure_hashmap.invoke(
+                    self.clojure.read(':languages'),
+                    clojure_list.invoke(*iso_languages)
+                )
+            )
+        else:
+            duckling_load.invoke()
+
         self._is_loaded = True
 
     def parse(self, input_str, language=Language.ENGLISH, dim_filter=None, reference_time=''):

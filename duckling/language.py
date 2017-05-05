@@ -58,3 +58,7 @@ class Language(object):
         else:
             raise ValueError("Unsupported language '{}'. Supported languages: {}".format(
                 lang, ", ".join(cls.SUPPORTED_LANGUAGES)))
+
+    @classmethod
+    def convert_to_iso(cls, lang):
+        return cls.convert_to_duckling_language_id(lang)[:2]

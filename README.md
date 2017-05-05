@@ -209,8 +209,15 @@ Duckling(jvm_started=False, parse_datetime=False, minimum_heap_size='128m', maxi
             is 2048m.
     """
 
-duckling.load():
-        """Loads the Duckling corpus"""
+duckling.load(self, languages=[]):
+        """Loads the Duckling corpus.
+
+        Languages can be specified, defaults to all.
+
+        Args:
+            languages: Optional parameter to specify languages,
+                e.g. [Duckling.ENGLISH, Duckling.FRENCH] or supported ISO 639-1 Codes (e.g. ["en", "fr"])
+        """
 
 duckling.parse(self, input_str, language=Language.ENGLISH, dim_filter=None, reference_time=''):
         """Parses datetime information out of string input.
