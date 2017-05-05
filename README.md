@@ -251,6 +251,7 @@ duckling.parse(self, input_str, language=Language.ENGLISH, dim_filter=None, refe
 
 #### Contributors
 - [Tom Bocklisch (tmbo)](https://github.com/tmbo)
+- [Laurent Valette (LaurentValette)](https://github.com/LaurentValette)
 
 #### License
 - Apache License 2.0 (check the LICENSE file)
