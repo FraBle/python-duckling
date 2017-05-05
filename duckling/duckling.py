@@ -19,7 +19,7 @@ class Duckling(object):
     Attributes:
         jvm_started: Optional attribute to specify if the JVM has already been
             started (with all Java dependencies loaded).
-        parse_datetime: Optional attribute to specify if datetime string should 
+        parse_datetime: Optional attribute to specify if datetime string should
             be parsed with datetime.strptime(). Default is False.
         minimum_heap_size: Optional attribute to set initial and minimum heap
             size. Default is 128m.
@@ -158,12 +158,7 @@ class Duckling(object):
 
     def _parse_reference_time(self, reference_time):
         date_info = parser.parse(reference_time)
-        utc_offset = 0
-        if date_info.utcoffset():
-            if date_info.utcoffset().days:
-                utc_offset = 24 - date_info.utcoffset().seconds // 3600
-            else:
-                utc_offset = date_info.utcoffset().seconds // 3600
+        utc_offset = int(date_info.utcoffset().total_seconds()) // 3600 if date_info.utcoffset() else 0
         return (utc_offset, date_info.year,
                 date_info.month, date_info.day,
                 date_info.hour, date_info.minute,

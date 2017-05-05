@@ -58,6 +58,15 @@ def test_parse_time_with_reference_time_and_datetime(duckling_wrapper_with_datet
         timedelta(days=1) == result[0][u'value'][u'value'].date()
 
 
+def test_parse_time_with_reference_time_and_weird_timezone(duckling_wrapper):
+    result = duckling_wrapper.parse_time(
+        u'Tomorrow at 5pm', reference_time='2017-04-11T08:26:07.470413-07:00')
+    assert len(result) == 1
+    assert parser.parse(u'2017-04-11').date() + \
+        timedelta(days=1) == parser.parse(result[0][u'value'][u'value']).date()
+    assert time(17, 00) == parser.parse(result[0][u'value'][u'value']).time()
+    assert timedelta(hours=-7) == parser.parse(result[0][u'value'][u'value']).utcoffset()
+
 def test_parse_time_with_reference_time_and_timezone(duckling_wrapper):
     result = duckling_wrapper.parse_time(
         u'Let\'s meet tomorrow at 12pm', reference_time=u'1990-12-30 15:30:00-8:00')
@@ -65,15 +74,26 @@ def test_parse_time_with_reference_time_and_timezone(duckling_wrapper):
     assert parser.parse(u'1990-12-30').date() + \
         timedelta(days=1) == parser.parse(result[0][u'value'][u'value']).date()
     assert time(12, 00) == parser.parse(result[0][u'value'][u'value']).time()
+    assert timedelta(hours=-8) == parser.parse(result[0][u'value'][u'value']).utcoffset()
 
 
-def test_parse_time_with_reference_time_and_datetime_and_timezone(duckling_wrapper_with_datetime):
+def test_parse_time_with_reference_time_and_datetime_and_negative_timezone(duckling_wrapper_with_datetime):
     result = duckling_wrapper_with_datetime.parse_time(
         u'Let\'s meet tomorrow at 12pm', reference_time=u'1990-12-30 15:30:00-8:00')
     assert len(result) == 1
     assert parser.parse(u'1990-12-30').date() + \
         timedelta(days=1) == result[0][u'value'][u'value'].date()
     assert time(12, 00) == result[0][u'value'][u'value'].time()
+    assert timedelta(hours=-8) == result[0][u'value'][u'value'].utcoffset()
+
+def test_parse_time_with_reference_time_and_datetime_and_positive_timezone(duckling_wrapper_with_datetime):
+    result = duckling_wrapper_with_datetime.parse_time(
+        u'Let\'s meet tomorrow at 12pm', reference_time=u'1990-12-30 15:30:00+8:00')
+    assert len(result) == 1
+    assert parser.parse(u'1990-12-30').date() + \
+        timedelta(days=1) == result[0][u'value'][u'value'].date()
+    assert time(12, 00) == result[0][u'value'][u'value'].time()
+    assert timedelta(hours=8) == result[0][u'value'][u'value'].utcoffset()
 
 
 def test_parse_times(duckling_wrapper):
