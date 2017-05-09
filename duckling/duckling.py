@@ -191,14 +191,15 @@ class Duckling(object):
     def _parse_dict(self, java_dict, dim=None):
         _functions = {
             u'type':   self._parse_string,
-            u'day':   self._parse_string,
             u'grain':  self._parse_symbol,
             u'values': self._parse_list,
             u'second': self._parse_int,
             u'minute': self._parse_int,
             u'hour': self._parse_int,
             u'day': self._parse_int,
+            u'week': self._parse_int,
             u'month': self._parse_int,
+            u'quarter': self._parse_int,
             u'year': self._parse_int,
         }
         _functions_with_dim = {
