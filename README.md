@@ -229,8 +229,8 @@ duckling.parse(self, input_str, language=Language.ENGLISH, dim_filter=None, refe
             input_str: The input as string that has to be parsed.
             language: Optional parameter to specify language,
                 e.g. Duckling.ENGLISH.
-            dim_filter: Optional parameter to specify list of filters for
-                dimensions in Duckling.
+            dim_filter: Optional parameter to specify a single filter or
+                list of filters for dimensions in Duckling.
             reference_time: Optional reference time for Duckling.
 
         Returns:

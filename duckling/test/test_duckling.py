@@ -376,3 +376,14 @@ def test_parse_phone_number_input(duckling_loaded):
 
     result_val = result[0][u'value']['value']
     assert result_val == test_input
+
+def test_multiple_dims(duckling_loaded):
+    test_input = '42'
+    result = duckling_loaded.parse(
+        'it will be ready in {input} weeks'.format(input=test_input),
+        dim_filter=[Dim.DISTANCE, Dim.NUMBER]
+    )
+
+    assert len(result) == 2
+    assert result[0][u'value']['value'] == float(test_input)
+    assert result[1][u'value']['value'] == float(test_input)

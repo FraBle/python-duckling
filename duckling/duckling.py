@@ -3,6 +3,7 @@ import imp
 import jpype
 import socket
 import threading
+import types
 from six import string_types
 from distutils.util import strtobool
 from dateutil import parser
@@ -116,8 +117,8 @@ class Duckling(object):
             input_str: The input as string that has to be parsed.
             language: Optional parameter to specify language,
                 e.g. Duckling.ENGLISH or supported ISO 639-1 Code (e.g. "en")
-            dim_filter: Optional parameter to specify list of filters for
-                dimensions in Duckling.
+            dim_filter: Optional parameter to specify a single filter or
+                list of filters for dimensions in Duckling.
             reference_time: Optional reference time for Duckling.
 
         Returns:
@@ -136,9 +137,10 @@ class Duckling(object):
         clojure_hashmap = self.clojure.var("clojure.core", "hash-map")
 
         filter_str = '[]'
-        if dim_filter:
+        if isinstance(dim_filter, types.StringTypes):
             filter_str = '[:{filter}]'.format(filter=dim_filter)
-
+        elif isinstance(dim_filter, list):
+            filter_str = '[{filter}]'.format(filter=' :'.join(dim_filter))
         if reference_time:
             duckling_result = duckling_parse.invoke(
                 language,
