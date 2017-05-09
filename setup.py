@@ -9,7 +9,7 @@ from setuptools import setup
 
 setup(
     name='duckling',
-    version='1.4.0',
+    version='1.5.0',
     description='A wrapper for wit.ai\'s Duckling',
     url='https://github.com/FraBle/python-duckling',
     author='Frank Blechschmidt',
@@ -42,7 +42,7 @@ setup(
         'duckling': [
             'jars/clj-time-0.8.0.jar',
             'jars/clojure-1.8.0.jar',
-            'jars/duckling-0.4.16.jar',
+            'jars/duckling-0.4.24.jar',
             'jars/joda-time-2.3.jar',
             'jars/lazymap-3.1.0.jar',
             'jars/plumbing-0.5.3.jar',
