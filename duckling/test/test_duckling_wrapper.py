@@ -292,17 +292,17 @@ def test_parse_emails(duckling_wrapper):
 
 def test_parse_url(duckling_wrapper):
     result = duckling_wrapper.parse_url(
-        u'http://frank-blechschmidt.com is under construction')
+        u'frank-blechschmidt.com is under construction')
     assert len(result) == 1
-    assert u'http://frank-blechschmidt.com' == result[0][u'value'][u'value']
+    assert u'frank-blechschmidt.com' == result[0][u'value'][u'value']
 
 
 def test_parse_urls(duckling_wrapper):
     result = duckling_wrapper.parse_url(
-        u'http://frank-blechschmidt.com is under construction, but you can check my github github.com/FraBle')
+        u'frank-blechschmidt.com is under construction, but you can check my github github.com/FraBle')
     assert len(result) == 2
-    assert u'github.com/FraBle' == result[0][u'value'][u'value']
-    assert u'http://frank-blechschmidt.com' == result[1][u'value'][u'value']
+    assert {u'frank-blechschmidt.com', u'github.com/FraBle'} == \
+        {result[0][u'value'][u'value'], result[1][u'value'][u'value']}
 
 
 def test_parse_phone_number(duckling_wrapper):
