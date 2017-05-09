@@ -69,6 +69,8 @@ class DucklingWrapper(object):
                 u'value': duckling_result_entry[u'value'].get(u'value', None)
             }
         }
+        if u'grain' in duckling_result_entry[u'value']:
+            result_entry[u'value'][u'grain'] = duckling_result_entry[u'value'].get(u'grain', None)
         return result_entry
 
     def _parse_number_with_unit(self, duckling_result_entry):
@@ -105,7 +107,10 @@ class DucklingWrapper(object):
             u'others': []
         })
         for value in duckling_result_entry[u'value'][u'values']:
-            result_entry[u'value'][u'others'].append(value[u'value'])
+            result_entry[u'value'][u'others'].append({
+                u'grain': value[u'grain'],
+                u'value': value[u'value']
+            })
         return result_entry
 
     def _parse_volume(self, duckling_result_entry):
