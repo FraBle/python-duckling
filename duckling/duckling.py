@@ -128,6 +128,9 @@ class Duckling(object):
             RuntimeError: An error occurres when Duckling model is not loaded
                 via load().
         """
+        if threading.activeCount() > 1:
+            if jpype.isThreadAttachedToJVM() is not 1:
+                jpype.attachThreadToJVM()
         if self._is_loaded is False:
             raise RuntimeError(
                 'Please load the model first by calling load()')
