@@ -3,7 +3,6 @@ import imp
 import jpype
 import socket
 import threading
-import types
 from six import string_types
 from distutils.util import strtobool
 from dateutil import parser
@@ -137,7 +136,7 @@ class Duckling(object):
         clojure_hashmap = self.clojure.var("clojure.core", "hash-map")
 
         filter_str = '[]'
-        if isinstance(dim_filter, types.StringTypes):
+        if isinstance(dim_filter, string_types):
             filter_str = '[:{filter}]'.format(filter=dim_filter)
         elif isinstance(dim_filter, list):
             filter_str = '[{filter}]'.format(filter=' :'.join(dim_filter))
