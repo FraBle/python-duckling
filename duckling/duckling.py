@@ -127,12 +127,12 @@ class Duckling(object):
             RuntimeError: An error occurres when Duckling model is not loaded
                 via load().
         """
-        if threading.activeCount() > 1:
-            if jpype.isThreadAttachedToJVM() is not 1:
-                jpype.attachThreadToJVM()
         if self._is_loaded is False:
             raise RuntimeError(
                 'Please load the model first by calling load()')
+        if threading.activeCount() > 1:
+            if jpype.isThreadAttachedToJVM() is not 1:
+                jpype.attachThreadToJVM()
         language = Language.convert_to_duckling_language_id(language)
         duckling_parse = self.clojure.var("duckling.core", "parse")
         duckling_time = self.clojure.var("duckling.time.obj", "t")
