@@ -249,7 +249,7 @@ class Duckling(object):
             Dim.PHONENUMBER:    self._parse_string,
             Dim.TIMEZONE:       self._parse_string
         }
-        if not dim:
+        if not dim or dim not in _dims:
             return self._parse_string(java_value)
         try:
             return _dims[dim](java_value)
