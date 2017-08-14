@@ -55,8 +55,9 @@ class DucklingWrapper(object):
             input_str, self.language, dim_filter=dim,
             reference_time=reference_time)
         for entry in duckling_result:
-            result_entry = self._dims[entry[u'dim']](entry)
-            result.append(result_entry)
+            if entry[u'dim'] in self._dims:
+                result_entry = self._dims[entry[u'dim']](entry)
+                result.append(result_entry)
         return result
 
     def _parse_basic_info(self, duckling_result_entry):
