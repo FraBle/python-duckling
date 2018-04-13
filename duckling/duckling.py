@@ -46,7 +46,7 @@ class Duckling(object):
         try:
             # make it thread-safe
             if threading.activeCount() > 1:
-                if jpype.isThreadAttachedToJVM() is not 1:
+                if not jpype.isThreadAttachedToJVM():
                     jpype.attachThreadToJVM()
             self._lock.acquire()
 
@@ -64,7 +64,7 @@ class Duckling(object):
             '-Djava.class.path={classpath}'.format(
                 classpath=self._classpath)
         ]
-        if jpype.isJVMStarted() is not 1:
+        if not jpype.isJVMStarted():
             jpype.startJVM(
                 jpype.getDefaultJVMPath(),
                 *jvm_options
@@ -131,7 +131,7 @@ class Duckling(object):
             raise RuntimeError(
                 'Please load the model first by calling load()')
         if threading.activeCount() > 1:
-            if jpype.isThreadAttachedToJVM() is not 1:
+            if not jpype.isThreadAttachedToJVM():
                 jpype.attachThreadToJVM()
         language = Language.convert_to_duckling_language_id(language)
         duckling_parse = self.clojure.var("duckling.core", "parse")

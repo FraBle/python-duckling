@@ -201,7 +201,7 @@ def test_parse_value(duckling, two_pm_str, java_long, java_string):
     number_dims = {Dim.TEMPERATURE, Dim.NUMBER, Dim.ORDINAL,
                    Dim.DISTANCE, Dim.VOLUME, Dim.AMOUNTOFMONEY, Dim.DURATION}
     for dim in number_dims:
-        assert duckling._parse_value(java_long('2'), dim) == 2
+        assert duckling._parse_value(java_long(2), dim) == 2
 
     string_dims = {Dim.EMAIL, Dim.URL, Dim.PHONENUMBER}
     for dim in string_dims:
@@ -211,11 +211,11 @@ def test_parse_value(duckling, two_pm_str, java_long, java_string):
 
 
 def test_parse_float(duckling, java_long):
-    assert duckling._parse_float(java_long('2')) == 2
+    assert duckling._parse_float(java_long(2)) == 2
 
 
 def test_parse_int(duckling, java_int):
-    assert duckling._parse_int(java_int('2')) == 2
+    assert duckling._parse_int(java_int(2)) == 2
 
 
 def test_parse_time(duckling, two_pm, two_pm_str):
