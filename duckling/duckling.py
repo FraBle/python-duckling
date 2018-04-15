@@ -157,7 +157,6 @@ class Duckling(object):
         else:
             duckling_result = duckling_parse.invoke(
                 language, input_str, self.clojure.read(filter_str))
-
         return self._parse_result(duckling_result)
 
     def _parse_reference_time(self, reference_time):
@@ -192,25 +191,26 @@ class Duckling(object):
 
     def _parse_dict(self, java_dict, dim=None):
         _functions = {
-            u'type':   self._parse_string,
-            u'grain':  self._parse_symbol,
-            u'values': self._parse_list,
-            u'second': self._parse_int,
-            u'minute': self._parse_int,
-            u'hour': self._parse_int,
             u'day': self._parse_int,
-            u'week': self._parse_int,
+            u'grain':  self._parse_symbol,
+            u'hour': self._parse_int,
+            u'minute': self._parse_int,
             u'month': self._parse_int,
+            u'product': self._parse_string,
             u'quarter': self._parse_int,
-            u'year': self._parse_int,
+            u'second': self._parse_int,
+            u'type':   self._parse_string,
+            u'values': self._parse_list,
+            u'week': self._parse_int,
+            u'year': self._parse_int
         }
         _functions_with_dim = {
-            u'value':   self._parse_value,
-            u'values':   self._parse_list,
-            u'normalized':  self._parse_dict,
-            u'unit': self._parse_keyword,
             u'from':  self._parse_dict,
-            u'to':  self._parse_dict
+            u'normalized':  self._parse_dict,
+            u'to':  self._parse_dict,
+            u'unit': self._parse_keyword,
+            u'value':   self._parse_value,
+            u'values':   self._parse_list
         }
 
         result = {}
@@ -236,18 +236,23 @@ class Duckling(object):
 
     def _parse_value(self, java_value, dim=None):
         _dims = {
-            Dim.TIME:           self._parse_time,
-            Dim.TEMPERATURE:    self._parse_float,
-            Dim.NUMBER:         self._parse_float,
-            Dim.ORDINAL:        self._parse_int,
-            Dim.DISTANCE:       self._parse_float,
-            Dim.VOLUME:         self._parse_float,
             Dim.AMOUNTOFMONEY:  self._parse_float,
+            Dim.CYCLE:          self._parse_string,
+            Dim.DISTANCE:       self._parse_float,
             Dim.DURATION:       self._parse_float,
             Dim.EMAIL:          self._parse_string,
-            Dim.URL:            self._parse_string,
+            Dim.LEVENPRODUCT:   self._parse_string,
+            Dim.LEVENUNIT:      self._parse_string,
+            Dim.NUMBER:         self._parse_float,
+            Dim.ORDINAL:        self._parse_int,
             Dim.PHONENUMBER:    self._parse_string,
-            Dim.TIMEZONE:       self._parse_string
+            Dim.QUANTITY:       self._parse_string,
+            Dim.TEMPERATURE:    self._parse_float,
+            Dim.TIME:           self._parse_time,
+            Dim.TIMEZONE:       self._parse_string,
+            Dim.UNITOFDURATION: self._parse_string,
+            Dim.URL:            self._parse_string,
+            Dim.VOLUME:         self._parse_float
         }
         if not dim or dim not in _dims:
             return self._parse_string(java_value)

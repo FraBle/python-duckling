@@ -403,3 +403,53 @@ def test_interval_only_from_with_datetime(duckling_wrapper_with_datetime, today_
         u'after tonight')
     assert len(result) == 1
     assert today_evening == result[0][u'value'][u'value'][u'from']
+
+
+def test_parse_product(duckling_wrapper):
+    result = duckling_wrapper.parse(u'5 cups of sugar')
+    assert len(result) == 8
+    assert u'leven-unit' == result[0][u'dim']
+    assert u'cup' == result[0][u'value'][u'value']
+    assert u'leven-product' == result[1][u'dim']
+    assert u'sugar' == result[1][u'value'][u'value']
+    assert u'quantity' == result[7][u'dim']
+    assert u'sugar' == result[7][u'value'][u'product']
+
+
+def test_parse_leven_product(duckling_wrapper):
+    result = duckling_wrapper.parse_leven_product(u'5 cups of sugar')
+    assert len(result) == 1
+    assert u'teaspoon' == result[0][u'value'][u'value']
+
+
+def test_parse_leven_unit(duckling_wrapper):
+    result = duckling_wrapper.parse_leven_unit(u'two pounds of meat')
+    assert len(result) == 1
+    assert u'pound' == result[0][u'value'][u'value']
+
+
+def test_parse_quantity(duckling_wrapper):
+    result = duckling_wrapper.parse_quantity(u'5 cups of sugar')
+    assert len(result) == 1
+    assert 5 == result[0][u'value'][u'value']
+    assert u'cup' == result[0][u'value'][u'unit']
+    assert u'sugar' == result[0][u'value'][u'product']
+
+
+# TODO: Find good examples for parse_cycle(), parse_unit(),
+#       and parse_unit_of_duration(). The utterances used below return no
+#       results from Duckling itself.
+
+# def test_parse_cycle(duckling_wrapper):
+#     result = duckling_wrapper.parse_cycle(u'coming week')
+#     assert len(result) == 1
+
+
+# def test_parse_unit(duckling_wrapper):
+#     result = duckling_wrapper.parse_unit(u'6 degrees outside')
+#     assert len(result) == 1
+
+
+# def test_parse_unit_of_duration(duckling_wrapper):
+#     result = duckling_wrapper.parse_unit_of_duration(u'1 second')
+#     assert len(result) == 1

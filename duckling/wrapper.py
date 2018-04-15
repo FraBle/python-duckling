@@ -46,7 +46,15 @@ class DucklingWrapper(object):
             Dim.EMAIL:          self._parse_basic_info,
             Dim.URL:            self._parse_basic_info,
             Dim.PHONENUMBER:    self._parse_basic_info,
-            Dim.TIMEZONE:       self._parse_basic_info
+            Dim.TIMEZONE:       self._parse_basic_info,
+            Dim.LEVENPRODUCT:   self._parse_basic_info,
+            Dim.LEVENUNIT:      self._parse_basic_info,
+            Dim.QUANTITY:       self._parse_quantity,
+
+            Dim.CYCLE:          self._parse_basic_info,
+            Dim.UNIT:           self._parse_basic_info,
+            Dim.UNITOFDURATION: self._parse_basic_info
+
         }
 
     def _parse(self, input_str, dim=None, reference_time=''):
@@ -141,6 +149,16 @@ class DucklingWrapper(object):
             if u'minute' in duckling_result_entry[u'value'] else None,
             u'second': duckling_result_entry[u'value'][u'second']
             if u'second' in duckling_result_entry[u'value'] else None
+        })
+        return result_entry
+
+    def _parse_quantity(self, duckling_result_entry):
+        result_entry = self._parse_basic_info(duckling_result_entry)
+        result_entry[u'value'].update({
+            u'unit': duckling_result_entry[u'value'][u'unit']
+            if u'unit' in duckling_result_entry[u'value'] else None,
+            u'product': duckling_result_entry[u'value'][u'product']
+            if u'product' in duckling_result_entry[u'value'] else None
         })
         return result_entry
 
@@ -587,3 +605,113 @@ class DucklingWrapper(object):
             ]
         """
         return self._parse(input_str, dim=Dim.PHONENUMBER)
+
+    def parse_leven_product(self, input_str):
+        """Parses input with Duckling for occurences of products.
+
+        Args:
+            input_str: An input string, e.g. '5 cups of sugar'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output. For
+            example:
+
+            [
+               {
+                  "dim": "leven-product",
+                  "end": 15,
+                  "start": 10,
+                  "value":
+                  {
+                     "value": "sugar"
+                  },
+                  "text": "sugar"
+               }
+            ]
+        """
+        return self._parse(input_str, dim=Dim.LEVENPRODUCT)
+
+    def parse_leven_unit(self, input_str):
+        """Parses input with Duckling for occurences of leven units.
+
+        Args:
+            input_str: An input string, e.g. 'two pounds of meat'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output. For
+            example:
+
+            [
+               {
+                  "dim": "leven-unit",
+                  "start": 4,
+                  "end": 10,
+                  "value":
+                  {
+                     "value": "pound"
+                  },
+                  "text": "pounds"
+               }
+            ]
+        """
+        return self._parse(input_str, dim=Dim.LEVENUNIT)
+
+    def parse_quantity(self, input_str):
+        """Parses input with Duckling for occurences of quantities.
+
+        Args:
+            input_str: An input string, e.g. '5 cups of sugar'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output. For
+            example:
+
+            [
+               {
+                  "dim": "quantity",
+                  "text": "5 cups of sugar",
+                  "start": 0,
+                  "end": 15,
+                  "value":
+                  {
+                     "value": 5,
+                     "unit": "cup",
+                     "product": "sugar"
+                  }
+                }
+            ]
+        """
+        return self._parse(input_str, dim=Dim.QUANTITY)
+
+    def parse_cycle(self, input_str):
+        """Parses input with Duckling for occurences of cycles.
+
+        Args:
+            input_str: An input string, e.g. 'coming week'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+        return self._parse(input_str, dim=Dim.CYCLE)
+
+    def parse_unit(self, input_str):
+        """Parses input with Duckling for occurences of units.
+
+        Args:
+            input_str: An input string, e.g. '6 degrees outside'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+        return self._parse(input_str, dim=Dim.UNIT)
+
+    def parse_unit_of_duration(self, input_str):
+        """Parses input with Duckling for occurences of units of duration.
+
+        Args:
+            input_str: An input string, e.g. '1 second'.
+
+        Returns:
+            A preprocessed list of results (dicts) from Duckling output.
+        """
+        return self._parse(input_str, dim=Dim.UNITOFDURATION)
