@@ -419,7 +419,7 @@ def test_parse_product(duckling_wrapper):
 def test_parse_leven_product(duckling_wrapper):
     result = duckling_wrapper.parse_leven_product(u'5 cups of sugar')
     assert len(result) == 1
-    assert u'teaspoon' == result[0][u'value'][u'value']
+    assert u'sugar' == result[0][u'value'][u'value']
 
 
 def test_parse_leven_unit(duckling_wrapper):
