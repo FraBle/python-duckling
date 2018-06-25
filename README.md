@@ -15,6 +15,10 @@ This library is inspired by [Edward Stone](https://github.com/eadmundo)'s [Pytho
 
 It provides a low-level access to Duckling's `parse()` function as well as a wrapper for easy access.
 
+#### Requirements
+
+`python-duckling` requires an installed JVM (either plain JRE or JDK) to run since Duckling itself is implemented in Clojure (which is leveraging the JVM).
+
 #### Examples
 ##### High-level (DucklingWrapper)
 ```python
