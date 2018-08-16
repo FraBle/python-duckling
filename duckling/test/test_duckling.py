@@ -5,6 +5,8 @@ from dateutil import parser
 from dateutil.tz import tzlocal
 from duckling import Duckling, Dim, Language
 
+all_langauges = Language.SUPPORTED_LANGUAGES
+all_langauges.remove(Language.BIRMAN) # does not support arabic digits
 
 @pytest.fixture
 def test_input():
@@ -387,3 +389,16 @@ def test_multiple_dims(duckling_loaded):
     assert len(result) == 2
     assert result[0][u'value']['value'] == float(test_input)
     assert result[1][u'value']['value'] == float(test_input)
+
+@pytest.mark.parametrize("language", all_langauges)
+def test_supported_languages_with_number_dim(duckling_loaded, language):
+    test_input = '4242'
+    result = duckling_loaded.parse(test_input, dim_filter=Dim.NUMBER, language=language)
+
+    print(result)
+
+    assert len(result) >= 1
+    assert result[0][u'dim'] == Dim.NUMBER
+
+    result_val = result[0][u'value'][u'value']
+    assert str(int(result_val)) == test_input
