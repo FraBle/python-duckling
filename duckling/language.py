@@ -11,12 +11,21 @@ class Language(object):
     ESTONIAN = 'et$core'
     FRENCH = 'fr$core'
     IRISH = 'ga$core'
+    HEBREW = 'he$core'
+    CROATIAN = 'hr$core'
     INDONESIAN = 'id$core'
     ITALIAN = 'it$core'
     JAPANESE = 'ja$core'
     KOREAN = 'ko$core'
+    BIRMAN = 'my$core'
+    NORVEGIAN = 'nb$core'
+    DUTCH = 'nl$core'
+    POLISH = 'pl$core'
     PORTUGUESE = 'pt$core'
+    ROMANIAN = 'ro$core'
     RUSSIAN = 'ru$core'
+    SWEDISH = 'sv$core'
+    TURKISH = 'tr$core'
     UKRAINIAN = 'uk$core'
     VIETNAMESE = 'vi$core'
     CHINESE = 'zh$core'
@@ -30,12 +39,21 @@ class Language(object):
         ESTONIAN,
         FRENCH,
         IRISH,
+        HEBREW,
+        CROATIAN,
         INDONESIAN,
         ITALIAN,
         JAPANESE,
         KOREAN,
+        BIRMAN,
+        NORVEGIAN,
+        DUTCH,
+        POLISH,
         PORTUGUESE,
+        ROMANIAN,
         RUSSIAN,
+        SWEDISH,
+        TURKISH,
         UKRAINIAN,
         VIETNAMESE,
         CHINESE,
