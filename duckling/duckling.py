@@ -1,4 +1,5 @@
 import os
+import sys
 import imp
 import jpype
 import socket
@@ -229,10 +230,18 @@ class Duckling(object):
         return result
 
     def _parse_float(self, java_number):
-        return float(java_number.toString())
+        return float(self._clean_value(java_number))
 
     def _parse_int(self, java_number):
-        return int(java_number.toString())
+        return int(self._clean_value(java_number))
+
+    def _clean_value(self, java_value):
+        val = str(java_value.toString())
+        if ":" in val:
+            _msg = "[WARN] got value '%s' from java code, this may be an error."
+            print(_msg % val, file=sys.stderr)
+            val = val.split(":")[-1]
+        return val
 
     def _parse_value(self, java_value, dim=None):
         _dims = {
@@ -271,7 +280,7 @@ class Duckling(object):
             return self._parse_string(time)
 
     def _parse_string(self, java_string):
-        return java_string
+        return str(java_string)
 
     def _parse_keyword(self, java_keyword, dim=None):
         if dim == Dim.DURATION:
@@ -282,7 +291,7 @@ class Duckling(object):
             return self._parse_string(java_keyword)
 
     def _parse_symbol(self, java_symbol):
-        return java_symbol.toString()[1:]
+        return str(java_symbol.toString())[1:]
 
     def _parse_boolean(self, java_boolean):
-        return bool(strtobool(java_boolean.toString()))
+        return bool(strtobool(str(java_boolean.toString())))
