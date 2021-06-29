@@ -12,6 +12,13 @@ from .language import Language
 
 socket.setdefaulttimeout(15)
 
+def _clean_value(java_value):
+    val = str(java_value.toString())
+    if ":" in val:
+        _msg = "[WARN] got value '%s' from java code, this may be an error."
+        print(_msg % val, file=sys.stderr)
+        val = val.split(":")[-1]
+    return val
 
 class Duckling(object):
 
@@ -230,18 +237,10 @@ class Duckling(object):
         return result
 
     def _parse_float(self, java_number):
-        return float(self._clean_value(java_number))
+        return float(_clean_value(java_number))
 
     def _parse_int(self, java_number):
-        return int(self._clean_value(java_number))
-
-    def _clean_value(self, java_value):
-        val = str(java_value.toString())
-        if ":" in val:
-            _msg = "[WARN] got value '%s' from java code, this may be an error."
-            print(_msg % val, file=sys.stderr)
-            val = val.split(":")[-1]
-        return val
+        return int(_clean_value(java_number))
 
     def _parse_value(self, java_value, dim=None):
         _dims = {
