@@ -67,6 +67,7 @@ class Duckling(object):
         if not jpype.isJVMStarted():
             jpype.startJVM(
                 jpype.getDefaultJVMPath(),
+		convertStrings=True,
                 *jvm_options
             )
 
